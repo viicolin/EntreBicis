@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: androidx.media3:media3-common-ktx:1.7.1@aar" external-system-id="GRADLE">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/8.10.2/transforms/1faf568cca7078b4d474db3e421b430b/transformed/media3-common-ktx-1.7.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/8.10.2/transforms/1faf568cca7078b4d474db3e421b430b/transformed/media3-common-ktx-1.7.1/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.media3/media3-common-ktx/1.7.1/7c7ead57aae87f93bffa55a3e45f00d45274656c/media3-common-ktx-1.7.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

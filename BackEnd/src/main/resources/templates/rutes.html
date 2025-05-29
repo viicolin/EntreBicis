@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Llistar Rutes - EntreBicis</title>
+    <style>
+        body {
+            background: url('/images/background.png') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .top-bar {
+            background-color: #8B5A2B;
+            color: white;
+            width: 100%;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            z-index: 100;
+        }
+
+        .left-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 40px;
+            height: auto;
+            margin-left: 10px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        .company-name {
+            flex-grow: 1;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logout-icon {
+            width: 30px;
+            height: auto;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        .container {
+            margin-top: 100px;
+            margin-bottom: 80px;
+            text-align: center;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        h1 {
+            color: white;
+            font-size: 32px;
+            width: 100%;
+        }
+
+        .ruta-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 15px;
+            width: 400px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .ruta-info {
+            text-align: left;
+        }
+
+        .ruta-info p {
+            margin: 6px 0;
+            font-size: 16px;
+        }
+
+        .ruta-info span.label {
+            font-weight: bold;
+            color: black;
+        }
+
+        .estat-vermell {
+            color: red;
+            font-weight: bold;
+        }
+
+        .estat-verd {
+            color: green;
+            font-weight: bold;
+        }
+
+        .saldo-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #8B5A2B;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .saldo-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #8B5A2B;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-around;
+            z-index: 100;
+        }
+
+        .bottom-nav img {
+            width: 30px;
+            cursor: pointer;
+        }
+
+        .bottom-nav img.active {
+            border: 2px solid white;
+            border-radius: 5px;
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top-bar">
+        <div class="left-section">
+            <img src="/images/logo.png" alt="EntreBicis Logo" class="logo" onclick="window.location.href='/menu'">
+        </div>
+        <div class="company-name">EntreBicis</div>
+        <a href="/logout">
+            <img src="/images/logout.png" alt="Logout" class="logout-icon">
+        </a>
+    </div>
+
+    <div class="container">
+        <h1>Llistar Rutes</h1>
+
+        <div th:if="${#lists.isEmpty(rutes)}" style="color: white; font-size: 24px; font-weight: bold; margin-top: 20px;">
+            No hi ha cap ruta registrada.
+        </div>
+
+        <div th:each="ruta : ${rutes}">
+            <a th:href="@{'/rutes/consultar/' + ${ruta.id}}">
+                <div class="ruta-card">
+                    <div class="saldo-container">
+                        <img src="/images/coin-icon.png" alt="Saldo" class="saldo-icon">
+                        <span th:text="${ruta.saldoAtorgat}"></span>&nbsp;Punts
+                    </div>
+
+                    <div class="ruta-info">
+                        <p><span class="label">Data:</span> <span th:text="${ruta.dataCreacio}"></span></p>
+                        <p><span class="label">Distància:</span> <span th:text="${#numbers.formatDecimal(ruta.distanciaTotal, 2, 2)}"></span> km</p>
+                        <p>
+                            <span class="label">Temps total:</span>
+                            <span th:text="${T(java.time.Duration).ofSeconds(ruta.tempsTotal).toHours()}"></span>h 
+                            <span th:text="${T(java.time.Duration).ofSeconds(ruta.tempsTotal).toMinutesPart()}"/>min 
+                            <span th:text="${T(java.time.Duration).ofSeconds(ruta.tempsTotal).toSecondsPart()}"/>s
+                        </p>
+                        <p><span class="label">Velocitat mitjana:</span> <span th:text="${#numbers.formatDecimal(ruta.velocitatMitjana, 2, 2)}"></span> km/h</p>
+                        <p><span class="label">Velocitat màxima:</span> <span th:text="${#numbers.formatDecimal(ruta.velocitatMaxima, 2, 2)}"></span> km/h</p>
+                        <p>
+                            <span th:if="${ruta.estatRuta.toString() == 'VALIDA'}" class="estat-verd">VALIDADA</span>
+                            <span th:if="${ruta.estatRuta.toString() != 'VALIDA'}" class="estat-vermell">NO VALIDADA</span>
+                        </p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <img src="/images/home.png" alt="Home" onclick="window.location.href='/menu'">
+        <img src="/images/users.png" alt="Users" onclick="window.location.href='/usuaris'">
+        <img src="/images/ruta.png" alt="Ruta" class="active" onclick="window.location.href='/rutes'">
+        <img src="/images/present.png" alt="Present" onclick="window.location.href='/recompenses'">
+        <img src="/images/settings.png" alt="Settings" onclick="window.location.href='/parametres'">
+    </div>
+</body>
+
+</html>

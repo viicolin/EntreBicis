@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Visualitzar Ruta - EntreBicis</title>
+    <style>
+        body {
+            background: url('/images/background.png') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .top-bar {
+            background-color: #8B5A2B;
+            color: white;
+            width: 100%;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            z-index: 100;
+        }
+
+        .left-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 40px;
+            height: auto;
+            margin-left: 10px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        .company-name {
+            flex-grow: 1;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logout-icon {
+            width: 30px;
+            height: auto;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        .container {
+            margin-top: 100px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .map-box {
+            height: 500px;
+            width: 80%;
+            max-width: 800px;
+            margin: auto;
+            margin-bottom: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            width: 80%;
+            max-width: 800px;
+            margin: 0 auto 30px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-box p {
+            font-size: 18px;
+            margin: 8px 0;
+        }
+
+        .info-box span.label {
+            font-weight: bold;
+        }
+
+        .btn-add-user {
+            position: absolute;
+            top: 90px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: #8B5A2B;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-add-user:hover {
+            background-color: #6F4518;
+        }
+
+        .btn-add-user .btn-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .btn-validate {
+            background-color: #28a745;
+            color: white;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .btn-reject {
+            background-color: #dc3545;
+            color: white;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+    </style>
+    <script async src="YourApiKey"></script>
+</head>
+
+<body>
+<div class="top-bar">
+    <div class="left-section">
+        <img src="/images/logo.png" alt="EntreBicis Logo" class="logo" onclick="window.location.href='/menu'">
+    </div>
+    <div class="company-name">EntreBicis</div>
+    <a href="/logout">
+        <img src="/images/logout.png" alt="Logout" class="logout-icon">
+    </a>
+</div>
+
+<button class="btn-add-user" onclick="window.location.href='/rutes'">
+    <img src="/images/arrow-left.png" alt="Tornar" class="btn-icon">
+</button>
+
+<div class="container">
+    <h1 style="color: white">Detalls de la Ruta</h1>
+
+    <div class="map-box" id="map"></div>
+
+    <div class="info-box">
+        <p><span class="label">Data:</span> <span th:text="${ruta.dataCreacio}"></span></p>
+        <p><span class="label">Distància:</span> <span th:text="${#numbers.formatDecimal(ruta.distanciaTotal, 2, 2)}"></span> km</p>
+        <p><span class="label">Temps:</span>
+            <span th:text="${T(java.time.Duration).ofSeconds(ruta.tempsTotal).toHours()} + 'h '"></span>
+            <span th:text="${T(java.time.Duration).ofSeconds(ruta.tempsTotal).toMinutesPart()} + 'min '"></span>
+            <span th:text="${T(java.time.Duration).ofSeconds(ruta.tempsTotal).toSecondsPart()} + 's'"></span>
+        </p>
+        <p><span class="label">Velocitat Mitjana:</span> <span th:text="${#numbers.formatDecimal(ruta.velocitatMitjana, 2, 2)}"></span> km/h</p>
+        <p><span class="label">Velocitat Màxima:</span>
+            <span th:text="${#numbers.formatDecimal(ruta.velocitatMaxima, 2, 2)}"
+                  th:style="${ruta.velocitatMaxima > parametres.velocitatMaximaValida ? 'color:red' : 'color:black'}"></span> km/h
+        </p>
+
+        <div style="margin-top: 30px;">
+            <form th:if="${!ruta.validar}" th:action="@{'/rutes/validar/' + ${ruta.id}}" method="post">
+                <button class="btn-validate" type="submit">✔ Validar Ruta</button>
+            </form>
+
+            <form th:if="${ruta.validar}" th:action="@{'/rutes/invalidar/' + ${ruta.id}}" method="post">
+                <button class="btn-reject" type="submit">✖ Invalidar Ruta</button>
+            </form>
+        </div>
+
+        <div th:if="${error}" style="color: red; margin-top: 15px;">
+            <p th:text="${error}"></p>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    let punts = /*[[${ruta.puntsGPS}]]*/ [];
+
+    function initMap() {
+        let map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 13,
+            center: punts.length > 0
+                ? { lat: punts[0].latitud, lng: punts[0].longitud }
+                : { lat: 41.38879, lng: 2.15899 },
+            mapTypeId: 'roadmap'
+        });
+
+        if (punts.length > 0) {
+            const bounds = new google.maps.LatLngBounds();
+            const path = punts.map(p => {
+                const point = new google.maps.LatLng(p.latitud, p.longitud);
+                bounds.extend(point);
+                new google.maps.Marker({ position: point, map: map });
+                return point;
+            });
+
+            new google.maps.Polyline({
+                path: path,
+                geodesic: true,
+                strokeColor: '#0000FF',
+                strokeOpacity: 1.0,
+                strokeWeight: 2,
+                map: map
+            });
+
+            map.fitBounds(bounds);
+        }
+    }
+
+    window.addEventListener('load', () => {
+        if (typeof google !== 'undefined') {
+            initMap();
+        } else {
+            console.error("Google Maps API no està carregada correctament.");
+        }
+    });
+</script>
+
+</body>
+</html>

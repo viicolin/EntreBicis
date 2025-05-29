@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Crear Nou Usuari - EntreBicis</title>
+    <style>
+        body {
+            background: url('/images/background.png') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .top-bar {
+            background-color: #8B5A2B;
+            color: white;
+            width: 100%;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            z-index: 100;
+        }
+        .left-section {
+            display: flex;
+            align-items: center;
+        }
+        .logo {
+            width: 40px;
+            height: auto;
+            margin-left: 10px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+        .company-name {
+            flex-grow: 1;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .logout-icon {
+            width: 30px;
+            height: auto;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        .btn-back {
+            position: absolute;
+            top: 90px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: #8B5A2B;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-back:hover {
+            background-color: #6F4518;
+        }
+
+        .btn-back img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .container {
+            margin-top: 120px;
+            margin-bottom: 80px;
+            text-align: center;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: white;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        .form-box {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 600px;
+            text-align: left;
+        }
+        .form-box label {
+            display: block;
+            font-weight: bold;
+            margin-top: 10px;
+            color: #333;
+        }
+        .form-box input,
+        .form-box select,
+        .form-box textarea {
+            width: calc(100% - 16px);
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+        .form-box .form-row {
+            display: flex;
+            justify-content: space-between;
+        }
+        .form-box .form-row .form-group {
+            width: 48%;
+        }
+        .form-box button {
+            width: 100%;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .form-box button:hover {
+            background-color: #218838;
+        }
+        .image-preview {
+            display: block;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-top: 10px;
+            border: 2px solid #8B5A2B;
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <div class="left-section">
+        <img src="/images/logo.png" alt="EntreBicis Logo" class="logo" onclick="window.location.href='/menu'">
+    </div>
+    <div class="company-name">EntreBicis</div>
+    <a href="/logout">
+        <img src="/images/logout.png" alt="Logout" class="logout-icon">
+    </a>
+</div>
+
+<button class="btn-back" onclick="window.history.back()">
+    <img src="/images/arrow-left.png" alt="Tornar">
+</button>
+
+<div class="container">
+    <h1>Crear Nou Usuari</h1>
+
+    <div class="form-box">
+        
+        <div th:if="${error}" style="color: red; font-weight: bold; margin-bottom: 10px; text-align: center;">
+            <p th:text="${error}"></p>
+        </div>
+
+        <form th:action="@{/nou_usuari}" th:object="${usuari}" method="post" enctype="multipart/form-data">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" th:field="*{email}" required>
+                </div>
+                <div class="form-group">
+                    <label for="nom">Nom:</label>
+                    <input type="text" id="nom" th:field="*{nom}" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="cognoms">Cognoms:</label>
+                    <input type="text" id="cognoms" th:field="*{cognoms}" required>
+                </div>
+                <div class="form-group">
+                    <label for="dataNaixement">Data de Naixement:</label>
+                    <input type="date" id="dataNaixement" th:field="*{dataNaixement}" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="poblacio">Població:</label>
+                    <input type="text" id="poblacio" th:field="*{poblacio}" required>
+                </div>
+                <div class="form-group">
+                    <label for="telefon">Telèfon:</label>
+                    <input type="text" id="telefon" th:field="*{telefon}" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="contrasenya">Contrasenya:</label>
+                    <input type="password" id="contrasenya" th:field="*{contrasenya}" required>
+                </div>
+                <div class="form-group">
+                    <label for="rol">Rol:</label>
+                    <select id="rol" th:field="*{rol}" required>
+                        <option value="ADMIN">Admin</option>
+                        <option value="CICLISTA">Ciclista</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group" style="width: 48%;">
+                    <label for="foto">Foto:</label>
+                    <input type="file" id="fotoFile" name="fotoFile" accept="image/*" onchange="previewImage(event)">
+                    <img id="imagePreview" class="image-preview" src="/images/default-user.png" alt="Imagen seleccionada">
+                </div>
+                <div class="form-group" style="width: 48%;">
+                    <label for="observacions">Observacions:</label>
+                    <textarea id="observacions" th:field="*{observacions}" rows="5"
+                        style="width: 100%; resize: vertical; border-radius: 5px; border: 1px solid #ccc; padding: 8px;"></textarea>
+                </div>
+            </div>
+            <button type="submit">Crear Usuari</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function () {
+            const output = document.getElementById('imagePreview');
+            output.src = reader.result;
+        }
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+
+</body>
+</html>

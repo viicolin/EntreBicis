@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Detall Usuari - EntreBicis</title>
+    <style>
+        body {
+            background: url('/images/background.png') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .top-bar {
+            background-color: #8B5A2B;
+            color: white;
+            width: 100%;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            z-index: 100;
+        }
+
+        .left-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 40px;
+            height: auto;
+            margin-left: 10px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        .company-name {
+            flex-grow: 1;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logout-icon {
+            width: 30px;
+            height: auto;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        .container {
+            margin-top: 80px;
+            margin-bottom: 80px;
+            text-align: center;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: white;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .user-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 15px;
+            width: 40%;
+            margin: 15px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative; /* Permite posicionar elementos dentro */
+        }
+
+        .user-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            object-fit: cover;
+        }
+
+        .user-info {
+            text-align: center;
+            width: 100%;
+        }
+
+        .user-info p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+        .user-info p span {
+            font-weight: bold;
+            color: #1E3A5F;
+        }
+
+        .user-info .user-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .saldo-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #8B5A2B;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .saldo-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
+
+        .btn-back {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #8B5A2B;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-back img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .btn-back:hover {
+            background-color: #6e4524;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .actions a {
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            background-color: #28a745;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .actions a:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="top-bar">
+        <div class="left-section">
+            <img src="/images/logo.png" alt="EntreBicis Logo" class="logo" onclick="window.location.href='/menu'">
+        </div>
+        <div class="company-name">EntreBicis</div>
+        <a href="/logout">
+            <img src="/images/logout.png" alt="Logout" class="logout-icon">
+        </a>
+    </div>
+
+    <div class="container">
+        <h1>Detall Usuari</h1>
+
+        <div class="user-card">
+            <button class="btn-back" onclick="window.history.back()">
+                <img src="/images/arrow-left.png" alt="Volver">
+            </button>
+
+            <div class="saldo-container">
+                <img src="/images/coin-icon.png" alt="Saldo" class="saldo-icon">
+                <span th:text="${usuari.saldoPunts}"></span>&nbsp;Punts
+            </div>
+
+            <img th:if="${imatgeBase64 != null}"
+                th:src="'data:image/jpeg;base64,' + ${imatgeBase64}" 
+                alt="Imatge Usuari" class="user-image">
+
+            <img th:if="${imatgeBase64 == null}" 
+                src="/images/default-user.png" 
+                alt="Imatge Usuari" class="user-image">
+
+            <div class="user-info">
+                <p class="user-name" th:text="${usuari.nom + ' ' + usuari.cognoms}">Nom d'Usuari</p>
+                <p><span>Email:</span> <span th:text="${usuari.email}">usuario@email.com</span></p>
+                <p><span>Rol:</span> <span th:text="${usuari.rol}">Ciclista</span></p>
+            </div>
+
+            <div class="actions">
+                <a th:href="@{/historialRutes/{email}(email=${usuari.email})}">Historial de Rutes</a>
+                <a th:href="@{/historialRecompenses/{email}(email=${usuari.email})}">Historial de Recompenses</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

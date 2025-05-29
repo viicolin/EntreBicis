@@ -1,0 +1,328 @@
+:toc-title: INDEX
+:toc: left
+:toclevels: 3
+:hardbreaks:
+:imagesdir: ./Imatges
+
+
+= Memòria EntreBicis Héctor
+
+image::EntreBicisIcon.png[align="center", width="1000", height="1000"]
+ 
+[.text-right]
+****
+**Nom:** Héctor Vico    
+**Curs:** DAM2M
+**Equip docent:** Manel Orós, Esther Sánchez, Jordi Cárdenas
+****
+
+== Recollida Requisits
+
+=== Contextualització de l’organització client
+
+L’organització que ha sol·licitat aquest projecte és Aprop Garraf, una entitat compromesa amb la mobilitat sostenible i el foment de l’ús de la bicicleta com a mitjà de transport ecològic i accessible. L’organització busca incentivar l’ús responsable de les bicicletes mitjançant la creació d’una aplicació que permeti registrar rutes i recompensar els ciclistes per la distància recorreguda.
+
+=== Objectius de l’organització
+
+Aprop Garraf té com a finalitat principal promoure la mobilitat sostenible i incentivar el transport actiu dins la comunitat. Els objectius específics de l’entitat són:
+
+* Fomentar l’ús de la bicicleta per reduir la dependència dels vehicles motoritzats.
+* Premiar els usuaris actius a través d’un sistema de punts bescanviables per productes o serveis locals.
+* Crear una comunitat de ciclistes que participin activament en la iniciativa.
+* Recolzar el comerç local, promovent la col·laboració amb establiments que ofereixin recompenses als ciclistes.
+* Garantir un registre fiable de rutes, que permeti validar l’activitat dels usuaris de manera transparent i segura.
+
+A través d’aquesta aplicació, Aprop Garraf busca combinar la tecnologia amb la sostenibilitat, creant un entorn en què la mobilitat neta sigui atractiva i accessible per a tothom.
+
+== Breu resum del projecte
+
+Aquest projecte té com a objectiu el desenvolupament d’un sistema digital compost per una aplicació mòbil per als usuaris ciclistes i una plataforma web per a l’administrador. La iniciativa és impulsada per Aprop Garraf amb l’objectiu de fomentar la mobilitat sostenible mitjançant un sistema de recompenses per als ciclistes.
+
+== Estructura del sistema
+
+* **Aplicació mòbil per a Android**: Utilitzada pels ciclistes per registrar les seves rutes, acumular punts en funció dels quilòmetres recorreguts i bescanviar-los per recompenses en establiments col·laboradors.
+* **Plataforma web per a l’administrador**: Serveix per gestionar els usuaris, validar les rutes i controlar el sistema de punts i recompenses.
+
+== Funcionalitats principals
+
+* **Registre i validació d’usuaris**: L’usuari s’haurà de registrar a l’aplicació i l’administrador validarà manualment cada compte des de la plataforma web.
+* **Seguiment de rutes mitjançant geolocalització**: L’app mòbil registrarà els trajectes dels ciclistes en temps real.
+* **Càlcul i acumulació de punts**: Els punts s’assignaran segons la distància recorreguda i es podran bescanviar per recompenses.
+* **Sistema de recompenses en establiments locals**: Els usuaris podran utilitzar els punts acumulats per obtenir productes o serveis en comerços col·laboradors.
+* **Gestió centralitzada des de la plataforma web**: L’administrador podrà validar rutes, aprovar registres d’usuaris i gestionar el catàleg de recompenses.
+
+== Els requeriments funcionals i no funcionals
+
+=== Requeriments funcionals (RF)
+
+== Els requeriments funcionals i no funcionals
+
+=== Requeriments funcionals (RF)
+
+Els requeriments funcionals indiquen les accions que ha de permetre fer l’aplicació per als diferents usuaris (ciclista i administrador).
+
+* RF01: *Validar ruta (admin)*
+** Permet canviar l’estat d’una ruta a “validada”.
+** El saldo es suma al compte del ciclista.
+** Només pot validar-se si abans era “no validada”.
+
+* RF02: *Invalidar ruta (admin)*
+** Permet canviar una ruta “vàlida” a “no vàlida”.
+** El saldo es resta del compte del ciclista.
+** Només es pot fer si el saldo disponible és suficient.
+
+* RF03: *Iniciar ruta (ciclista)*
+** Només es pot iniciar si no hi ha cap ruta activa.
+** Cal consultar el paràmetre "Temps màxim d’aturada" per a finalització automàtica.
+
+* RF04: *Visualitzar detalls ampliats d’una ruta*
+** Mostra:
+*** Data de la ruta.
+*** Distància recorreguda (amb precisió).
+*** Temps total.
+*** Velocitat màxima (amb alerta si supera el límit).
+*** Velocitat mitjana (distància / temps).
+*** Mapa interactiu amb zoom i informació de cada punt.
+** El ciclista veu només les seves rutes.
+** L’administrador pot veure qualsevol ruta.
+
+* RF05: *Finalitzar ruta (ciclista)*
+** Només es pot finalitzar si està “en curs”.
+** Després de finalitzar:
+*** No s’hi poden afegir més punts.
+*** L’estat canvia a “no validada”.
+*** Es mostren els detalls ampliats (RF04).
+
+* RF06: *Llistar rutes*
+** Mostra per a cada ruta:
+*** Data, distància, temps total.
+*** Velocitat mitjana (calculada com distància/temps).
+*** Velocitat màxima.
+*** Saldo atorgat (si és vàlida).
+*** Estat de validació.
+** Ciclista veu només les seves rutes.
+** L’administrador les pot veure totes.
+
+* RF09: *Crear recompensa (admin)*
+** Es pot crear una recompensa nova.
+** El punt de bescanvi és un camp de text (nom + adreça).
+
+* RF11: *Eliminar recompensa disponible (admin)*
+** Només es pot eliminar si està en estat “disponible”.
+** No pot estar reservada, assignada ni recollida.
+
+* RF12: *Reservar recompensa (ciclista)*
+** Condicions:
+*** Ha de tenir saldo suficient.
+*** Només pot tenir una recompensa reservada a la vegada.
+*** La recompensa ha d’estar en estat “disponible”.
+
+* RF14: *Assignar recompensa (admin)*
+** Es descompta el saldo del ciclista.
+** Es registra la data d’assignació.
+** Només es pot tenir una recompensa assignada alhora.
+
+* RF16: *Recollir recompensa (ciclista)*
+** Mostra la informació de la recompensa assignada.
+** Es mostra una imatge gran amb “ENTREGAT”.
+** El sistema la marca com recollida i desa la data/hora.
+
+* RF18: *Llistar recompenses*
+** Mostra:
+*** Nom, punt de bescanvi, punts, estat, usuari (si escau).
+** Condicions d'accés:
+*** Ciclista: només les seves recompenses o les disponibles.
+*** Admin: pot veure-les totes.
+
+* RF21: *Mostrar detall de la recompensa*
+** Mostra:
+*** Nom, dates (creació, reserva, assignació, recollida).
+*** Nom de l’usuari (si escau).
+*** Punt de bescanvi.
+*** Estat.
+
+* RF22: *Crear usuari (admin)*
+** Es poden afegir nous usuaris amb dades completes.
+
+* RF23: *Modificar usuari*
+** Ciclista: pot editar només les seves dades i foto.
+** Admin: pot modificar qualsevol usuari.
+
+* RF25: *Llistar usuaris (admin)*
+** Mostra:
+*** Nom complet.
+*** Correu electrònic.
+*** Rol (ciclista o admin).
+
+* RF26: *Visualitzar detalls de l’usuari*
+** Mostra:
+*** Foto (si en té), nom, correu, rol, saldo.
+*** Historial de rutes i recompenses.
+
+* RF27: *Recuperar password usuari*
+** Permet recuperar la contrasenya de forma segura.
+
+* RF29: *Login / Logout*
+** Ciclista:
+*** Pot fer login a l’app.
+*** Pot fer logout en qualsevol moment.
+** Admin:
+*** Pot fer login i logout des de web i app.
+
+* RF36: *Modificar paràmetres del sistema (admin)*
+** Es poden canviar:
+*** Velocitat màxima vàlida (per defecte 60 km/h).
+*** Temps màxim d’aturada (per defecte 5 minuts).
+*** Conversió saldo/quilòmetres (per defecte 1 km = 1 punt).
+*** Temps màxim per recollir recompensa (per defecte 72 hores).
+
+=== Requeriments no funcionals (RNF)
+
+==== Requeriments generals
+
+* RN01: Multilloc amb un màxim de 50 usuaris ciclistes.
+* RN02: Arquitectura client-servidor amb API REST i Spring Boot.
+* RN03: Registre de logs per errors, excepcions i avisos.
+* RN04: Codi eficient, optimitzat i sense redundàncies.
+* RN05: Ús correcte de classes, interfícies i estructures.
+* RN06: JavaDoc (backend) i KDoc (Kotlin) en mètodes rellevants.
+* RN07: Excepcions mostrades de forma comprensible a l’usuari.
+* RN09: Git/GitLab amb branques `main`, `developer` i per funcionalitats.
+* RN10: Eliminar branques fusionades després del merge.
+* RN12: Comunicació frontend-backend mitjançant REST.
+* RN14: Tota la interfície i missatges han d’estar en català.
+
+=== Frontend mòbil
+
+* RN20: Desenvolupament amb Android Studio i Kotlin.
+* RN21: Arquitectura Feature Layer + Clean Architecture.
+* RN22: MVVM amb MutableStateFlow.
+* RN23: UI amb Jetpack Compose.
+* RN24: Segueix les directrius de Material Design.
+* RN25: Components visuals modulars i reutilitzables.
+* RN26: Interfície intuïtiva, accessible i clara.
+* RN27: Resposta fluida de la UI. Ús d’operacions asíncrones.
+* RN28: Component de navegació per a les pantalles principals.
+* RN29: Compatible amb dispositius Android i emuladors.
+
+=== Backend
+
+* RN41: Estructura de projecte Maven.
+* RN42: Codi separat per capes: servei, negoci i persistència.
+* RN43: Implementació amb Spring Boot.
+* RN44: Compatible amb Linux i Windows.
+
+=== Frontend web
+
+* RN51: Accés via navegador per a l’administrador.
+* RN52: Coherència visual i agrupació clara.
+* RN53: Adaptació responsive del contingut.
+* RN54: Atenció a la diversitat funcional.
+* RN55: Fluïdesa constant. Informar si s’espera.
+* RN56: Interfície clara, intuïtiva i coherent.
+
+=== Seguretat
+
+* RN61: Autenticació per usuari i contrasenya.
+* RN63: Contrasenyes xifrades amb hash robust.
+* RN64: Protecció constant de les dades personals.
+
+=== Desplegament
+
+* RN71: Backend i base de dades al mateix servidor, disponible 24/7.
+* RN72: Desplegament amb contenidors Docker.
+
+== Guions per actors
+
+=== Actor: Ciclista (Usuari de l'App Mòbil)
+
+* RF03: *Iniciar ruta* → L’usuari pot començar una nova ruta manualment des de l’aplicació mòbil, sempre que no tingui cap altra ruta en curs.
+* RF04: *Visualitzar detalls ampliats d’una ruta* → L’usuari pot consultar la informació detallada de les seves rutes, incloent distància, temps, velocitat i visualització en mapa interactiu.
+* RF05: *Finalitzar ruta* → L’usuari pot finalitzar la seva ruta manualment perquè sigui processada.
+* RF06: *Llistar rutes* → L’usuari pot veure un llistat de les seves rutes anteriors amb informació bàsica.
+* RF12: *Reservar recompensa* → L’usuari pot reservar una recompensa si té suficients punts disponibles.
+* RF16: *Recollir recompensa* → L’usuari ha d’anar a la botiga i mostrar la seva reserva per obtenir la recompensa.
+* RF18: *Llistar recompenses* → Els usuaris podran veure un llistat de totes les recompenses disponibles i el seu estat.
+* RF21: *Mostrar detall de la recompensa* → Mostra les característiques d’una recompensa seleccionada dins el llistat de recompenses.
+* RF23: *Modificar usuari* → L’usuari tan sols podrà modificar les seves dades d’usuari.
+* RF26: *Visualitzar detalls de l’usuari* → L’usuari podrà veure les seves dades d’usuari, és a dir, el seu perfil.
+* RF27: *Recuperar password usuari* → L’usuari pot sol·licitar la recuperació de la seva contrasenya en cas d’oblit.
+* RF29: *Login / Logout* → L’usuari pot iniciar sessió i tancar-la a l’aplicació mòbil.
+
+=== Actor: Administrador (Usuari de la Plataforma Web)
+
+* RF01: *Validar ruta* → L’administrador revisa una ruta i la valida si compleix els criteris establerts, afegint els punts corresponents a l’usuari.
+* RF02: *Invalidar ruta* → Si una ruta no compleix els requisits, l’administrador pot invalidar-la.
+* RF03: *Iniciar ruta* → L’usuari pot començar una nova ruta manualment des de l’aplicació mòbil, sempre que no tingui cap altra ruta en curs.
+* RF04: *Visualitzar detalls ampliats d’una ruta* → L’usuari pot consultar la informació detallada de les seves rutes, incloent distància, temps, velocitat i visualització en mapa interactiu.
+* RF05: *Finalitzar ruta* → L’usuari pot finalitzar la seva ruta manualment perquè sigui processada.
+* RF06: *Llistar rutes* → L’usuari pot veure un llistat de les seves rutes anteriors amb informació bàsica.
+* RF09: *Crear recompensa* → L’administrador pot crear una nova recompensa i assignar-la a un punt de bescanvi.
+* RF11: *Eliminar recompensa disponible* → L’administrador pot suprimir recompenses que no estiguin reservades o assignades.
+* RF12: *Reservar recompensa* → L’usuari pot reservar una recompensa si té suficients punts disponibles.
+* RF14: *Assignar recompensa* → Un cop l’usuari ha reservat una recompensa, l’administrador ha d’assignar-la abans que pugui ser recollida.
+* RF16: *Recollir recompensa* → L’usuari ha d’anar a la botiga i mostrar la seva reserva per obtenir la recompensa.
+* RF18: *Llistar recompenses* → L’administrador pot veure un llistat de totes les recompenses disponibles i el seu estat.
+* RF21: *Mostrar detall de la recompensa* → L’administrador pot consultar les característiques d’una recompensa seleccionada.
+* RF22: *Crear usuari* → L’administrador pot donar d’alta nous usuaris després d’una validació manual.
+* RF23: *Modificar usuari* → L’administrador pot modificar les dades d’un usuari existent.
+* RF25: *Llistar usuaris* → L’administrador pot veure una llista d’usuaris registrats.
+* RF26: *Visualitzar detalls de l’usuari* → L’administrador pot accedir a la informació completa d’un usuari.
+* RF27: *Recuperar password usuari* → L’administrador pot generar un procés segur de recuperació de contrasenya per als usuaris.
+* RF29: *Login / Logout* → L’administrador pot iniciar sessió tant a l’aplicació mòbil com a la plataforma web.
+* RF36: *Modificar paràmetres del sistema* → L’administrador pot modificar aspectes generals com la velocitat màxima permesa o el temps màxim d’aturada.
+
+=== Actor: Sistema (Processos Automàtics)
+
+* RF05: *Finalitzar ruta* → Quan un usuari finalitza una ruta, el sistema la deixa en estat *"no validada"* i espera la validació de l’administrador.
+
+== Diagrama d’arquitectura
+
+image::Arquitectura.drawio.png[Arquitectura]
+image::Package.drawio.png[Package]
+
+== Disseny del diagrama E-R
+
+image::DiagramaER_EntreBicis.drawio (7).png[e-r]
+
+== Disseny de la base de dades
+
+image::Captura.PNG[Base de dades]
+
+== Diagrama de casos d’ús
+
+image::EntreBicis.drawio (1).png[Casos d'us]
+
+== Disseny d’interfícies d’usuari (mockups) i navegació
+
+Enllaç al projecte:  
+https://www.figma.com/design/qJKcLHY4xM6iVUb2KAWVht/EntreBicis?node-id=1-2&t=LjzuYG4IdlggQg8e-1[EntreBicis a Figma]
+
+=== Plantilla
+image::Plantilla.PNG[][Plantilla]
+
+=== Android Ciclistes
+image::Android1.PNG[Android]
+image::Android2.PNG[Android]
+image::Android3.PNG[Android]
+
+=== Web Administrador
+image::Web1.PNG[Web]
+image::Web2.PNG[Web]
+image::Web3.PNG[Web]
+image::Web4.PNG[Web]
+image::Web5.PNG[Web]
+image::Web6.PNG[Web]
+image::Web7.PNG[Web]
+image::Web8.PNG[Web]
+
+== Planificació de les tasques i gestió del projecte
+
+image::Trello1.PNG[Trello]
+image::Trello2.PNG[Trello]
+image::Trello3.PNG[Trello]
+image::Trello4.PNG[Trello]
+image::Trello5.PNG[Trello]
+
+== Video Projecte
+https://drive.google.com/drive/folders/1n-XuPRYIi_I8o5GPykmN9QlyJ-6OB-b1?usp=sharing[Vídeo del projecte EntreBicis]

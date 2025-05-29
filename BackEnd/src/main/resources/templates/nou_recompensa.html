@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Crear Nova Recompensa - EntreBicis</title>
+    <style>
+        /* Estilo del fondo */
+        body {
+            background: url('/images/background.png') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Barra superior */
+        .top-bar {
+            background-color: #8B5A2B;
+            color: white;
+            width: 100%;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            z-index: 100;
+        }
+
+        .left-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 40px;
+            height: auto;
+            margin-left: 10px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        .company-name {
+            flex-grow: 1;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logout-icon {
+            width: 30px;
+            height: auto;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        /* Contenedor principal */
+        .container {
+            margin-top: 80px;
+            margin-bottom: 80px;
+            text-align: center;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: white;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        /* Formulario */
+        .form-box {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 600px;
+            text-align: left;
+        }
+
+        .form-box label {
+            display: block;
+            font-weight: bold;
+            margin-top: 10px;
+            color: #333;
+        }
+
+        .form-box input,
+        .form-box select,
+        .form-box textarea {
+            width: calc(100% - 16px);
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+
+        }
+
+        .form-box textarea {
+            resize: vertical;
+            height: 80px;
+        }
+
+        .form-box button {
+            width: 100%;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .form-box button:hover {
+            background-color: #218838;
+        }
+
+        .btn-back-recom {
+            position: absolute;
+            top: 90px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: #8B5A2B;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-back-recom:hover {
+            background-color: #6F4518;
+        }
+
+        .btn-back-recom .btn-icon {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Barra superior -->
+    <div class="top-bar">
+        <div class="left-section">
+            <img src="/images/logo.png" alt="EntreBicis Logo" class="logo" onclick="window.location.href='/menu'">
+        </div>
+        <div class="company-name">EntreBicis</div>
+        <a href="/logout">
+            <img src="/images/logout.png" alt="Logout" class="logout-icon">
+        </a>
+    </div>
+
+    <button class="btn-back-recom" onclick="window.location.href='/recompenses'">
+        <img src="/images/arrow-left.png" alt="Volver" class="btn-icon">
+    </button>
+
+    <!-- Contenedor principal -->
+    <div class="container">
+        <h1>Crear Nova Recompensa</h1>
+
+        <div th:if="${error}" style="color: red; margin-bottom: 15px; font-weight: bold;">
+            <p th:text="${error}"></p>
+        </div>
+
+        <div class="form-box">
+            <form th:action="@{/recompenses/crear}" method="post">
+                <label for="nom">Nom:</label>
+                <input type="text" id="nom" name="nom" required>
+
+                <label for="descripcio">Descripció:</label>
+                <input type="text" id="descripcio" name="descripcio" required>
+
+                <label for="puntsRequerits">Punts Requerits:</label>
+                <input type="number" id="puntsRequerits" name="puntsRequerits" required min="0" max="9999" step="1">
+
+                <label for="puntBescambiNom">Nom del Punt de Bescanvi:</label>
+                <input type="text" id="puntBescambiNom" name="puntBescambiNom" required>
+
+                <label for="puntBescambiAdreca">Adreça del Punt de Bescanvi:</label>
+                <input type="text" id="puntBescambiAdreca" name="puntBescambiAdreca" required>
+
+                <label for="observacions">Observacions:</label>
+                <textarea id="observacions" name="observacions"></textarea>
+
+                <button type="submit">Crear Recompensa</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

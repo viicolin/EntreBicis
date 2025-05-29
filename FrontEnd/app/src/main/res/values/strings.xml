@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">EntreBicis</string>
+    <string name="unkViewModel">Unknown ViewModel class</string>
+</resources>

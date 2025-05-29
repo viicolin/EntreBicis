@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Llistar Usuaris - EntreBicis</title>
+    <style>
+        /* Estilo del fondo */
+        body {
+            background: url('/images/background.png') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Barra superior */
+        .top-bar {
+            background-color: #8B5A2B;
+            color: white;
+            width: 100%;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            z-index: 100;
+        }
+
+        .left-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 40px;
+            height: auto;
+            margin-left: 10px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        .btn-perfil:hover {
+            background-color: #ddd;
+        }
+
+        .company-name {
+            flex-grow: 1;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logout-icon {
+            width: 30px;
+            height: auto;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        /* Contenedor principal */
+        .container {
+            margin-top: 80px;
+            margin-bottom: 80px;
+            text-align: center;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: white;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        /* Tarjeta de usuario */
+        .user-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 15px;
+            width: 40%;
+            margin: 15px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .user-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .user-info {
+            text-align: center;
+            width: 100%;
+        }
+
+        .user-info p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+        .user-info p span {
+            font-weight: bold;
+            color: #1E3A5F;
+        }
+
+        .user-info .user-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* Botones */
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .actions a {
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            background-color: #28a745;
+            /* Verde */
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .actions a:hover {
+            background-color: #218838;
+            /* Verde más oscuro */
+        }
+
+        /* Navegación inferior */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #8B5A2B;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-around;
+            z-index: 100;
+        }
+
+        .bottom-nav img {
+            width: 30px;
+            cursor: pointer;
+        }
+
+        .bottom-nav img.active {
+            border: 2px solid white;
+            border-radius: 5px;
+        }
+
+        /* Botón para añadir un nuevo usuario */
+        .btn-add-user {
+            position: absolute;
+            top: 90px;
+            /* Debajo del banner */
+            right: 20px;
+            /* En la esquina derecha */
+            width: 50px;
+            height: 50px;
+            background-color: #8B5A2B;
+            /* Mismo color que el banner */
+            color: rgb(0, 0, 0);
+            /* Texto en blanco */
+            border: none;
+            /* Sin borde */
+            border-radius: 50%;
+            /* Forma redonda */
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 45px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            /* Sombra */
+        }
+
+        .btn-add-user:hover {
+            background-color: #6F4518;
+            /* Color más oscuro al pasar el cursor */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Barra superior -->
+    <div class="top-bar">
+        <div class="left-section">
+            <img src="/images/logo.png" alt="EntreBicis Logo" class="logo" onclick="window.location.href='/menu'">
+        </div>
+        <div class="company-name">EntreBicis</div>
+        <a href="/logout">
+            <img src="/images/logout.png" alt="Logout" class="logout-icon">
+        </a>
+    </div>
+
+    <!-- Botón para añadir un nuevo usuario -->
+    <button class="btn-add-user" onclick="window.location.href='/nou_usuari'">+</button>
+
+    <!-- Contenedor principal -->
+    <div class="container">
+        <h1>Llistar Usuaris</h1>
+
+        <!-- Lista de usuarios -->
+        <div th:each="user : ${usuaris}" class="user-card">
+            <img th:if="${imatgesBase64[user.email] != null}"
+                th:src="'data:image/jpeg;base64,' + ${imatgesBase64[user.email]}" alt="Imatge Usuari"
+                class="user-image">
+
+            <img th:if="${imatgesBase64[user.email] == null}" src="/images/default-user.png" alt="Imatge Usuari"
+                class="user-image">
+            <div class="user-info">
+                <p class="user-name" th:text="${user.nom + ' ' + user.cognoms}">Nom d'Usuari</p>
+                <p><span>Email:</span> <span th:text="${user.email}">usuario@email.com</span></p>
+                <p><span>Rol:</span> <span th:text="${user.rol}">Ciclista</span></p>
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="actions">
+                <a th:href="@{/usuari/{email}(email=${user.email})}">Visualitzar</a>
+                <a th:href="@{/usuari/modificar/{email}(email=${user.email})}">Modificar</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navegación inferior -->
+    <div class="bottom-nav">
+        <img src="/images/home.png" alt="Home" onclick="window.location.href='/menu'">
+        <img src="/images/users.png" alt="Users" class="active" onclick="window.location.href='/usuaris'">
+        <img src="/images/ruta.png" alt="Ruta" onclick="window.location.href='/rutes'">
+        <img src="/images/present.png" alt="Present" onclick="window.location.href='/recompenses'">
+        <img src="/images/settings.png" alt="Settings" onclick="window.location.href='/parametres'">
+    </div>
+</body>
+
+</html>

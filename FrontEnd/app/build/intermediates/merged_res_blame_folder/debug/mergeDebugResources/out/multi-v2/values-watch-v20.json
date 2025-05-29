@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "cat.copernic.hvico.entrebicis.app-mergeDebugResources-71:/values-watch-v20/values-watch-v20.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\hecto\\.gradle\\caches\\8.10.2\\transforms\\952ed90ae28f54171a3da5fd8b12b5c1\\transformed\\appcompat-1.6.1\\res\\values-watch-v20\\values-watch-v20.xml",
+                    "from": {
+                        "startLines": "2,5,8",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,214,385",
+                        "endLines": "4,7,10",
+                        "endColumns": "12,12,12",
+                        "endOffsets": "209,380,553"
+                    }
+                }
+            ]
+        }
+    ]
+}

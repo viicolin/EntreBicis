@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Historial de Rutes - EntreBicis</title>
+    <style>
+        body {
+            background: url('/images/background.png') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .top-bar {
+            background-color: #8B5A2B;
+            color: white;
+            width: 100%;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            z-index: 100;
+        }
+
+        .left-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 40px;
+            height: auto;
+            margin-left: 10px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        .company-name {
+            flex-grow: 1;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logout-icon {
+            width: 30px;
+            height: auto;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        .container {
+            margin-top: 100px;
+            margin-bottom: 80px;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        h1 {
+            color: white;
+            font-size: 32px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .ruta-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 15px;
+            width: 400px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .ruta-info {
+            text-align: left;
+        }
+
+        .ruta-info p {
+            margin: 6px 0;
+            font-size: 16px;
+        }
+
+        .ruta-info span.label {
+            font-weight: bold;
+            color: black;
+        }
+
+        .estat-vermell {
+            color: red;
+            font-weight: bold;
+        }
+
+        .estat-verd {
+            color: green;
+            font-weight: bold;
+        }
+
+        .saldo-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #8B5A2B;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .saldo-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
+
+        .btn-back {
+            position: absolute;
+            top: 90px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: #8B5A2B;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-back:hover {
+            background-color: #6F4518;
+        }
+
+        .btn-back img {
+            width: 20px;
+            height: 20px;
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top-bar">
+        <div class="left-section">
+            <img src="/images/logo.png" alt="EntreBicis Logo" class="logo" onclick="window.location.href='/menu'">
+        </div>
+        <div class="company-name">EntreBicis</div>
+        <a href="/logout">
+            <img src="/images/logout.png" alt="Logout" class="logout-icon">
+        </a>
+    </div>
+
+    <button class="btn-back" onclick="window.history.back()">
+        <img src="/images/arrow-left.png" alt="Volver">
+    </button>
+
+    <div class="container">
+        <h1>Historial de Rutes</h1>
+
+        <div th:if="${missatge != null}" style="color: white; font-size: 24px; font-weight: bold; margin-top: 20px;">
+            <p th:text="${missatge}"></p>
+        </div>
+
+        <div th:each="ruta : ${rutes}">
+            <a th:href="@{'/rutes/consultar/' + ${ruta.id}}">
+                <div class="ruta-card">
+                    <div class="saldo-container">
+                        <img src="/images/coin-icon.png" alt="Saldo" class="saldo-icon">
+                        <span th:text="${ruta.saldoAtorgat}"></span>&nbsp;Punts
+                    </div>
+
+                    <div class="ruta-info">
+                        <p><span class="label">Data:</span> <span th:text="${ruta.dataCreacio}"></span></p>
+                        <p><span class="label">Distància:</span> <span th:text="${#numbers.formatDecimal(ruta.distanciaTotal, 2, 2)}"></span> km</p>
+                        <p>
+                            <span class="label">Temps total:</span>
+                            <span th:text="${T(java.time.Duration).ofSeconds(ruta.tempsTotal).toHours()}"/>h 
+                            <span th:text="${T(java.time.Duration).ofSeconds(ruta.tempsTotal).toMinutesPart()}"/>min 
+                            <span th:text="${T(java.time.Duration).ofSeconds(ruta.tempsTotal).toSecondsPart()}"/>s
+                        </p>
+                        <p><span class="label">Velocitat mitjana:</span> <span th:text="${#numbers.formatDecimal(ruta.velocitatMitjana, 2, 2)}"></span> km/h</p>
+                        <p><span class="label">Velocitat màxima:</span> <span th:text="${#numbers.formatDecimal(ruta.velocitatMaxima, 2, 2)}"></span> km/h</p>
+                        <p>
+                            <span th:if="${ruta.estatRuta.toString() == 'VALIDA'}" class="estat-verd">VALIDADA</span>
+                            <span th:if="${ruta.estatRuta.toString() != 'VALIDA'}" class="estat-vermell">NO VALIDADA</span>
+                        </p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>

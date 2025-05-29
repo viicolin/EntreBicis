@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Inici de Sessió - EntreBicis</title>
+    <style>
+        body {
+            background: url('/images/background.png') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .logo {
+            width: 100px;
+            height: auto;
+            border-radius: 30px;
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #fff;
+            margin-top: 10px;
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 10px;
+            color: #333;
+            width: 100%;
+        }
+
+        input {
+            width: calc(100% - 16px); 
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        .btn-confirmar {
+            width: 100%;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn-confirmar:hover {
+            background-color: #218838;
+        }
+
+        .forgot-password {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <img src="/images/logo.png" alt="EntreBicis Logo" class="logo">
+        <h1>EntreBicis</h1>
+        <div class="login-box">
+            <h2>Inici de Sessió</h2>
+
+            <div th:if="${error}" style="color: red; font-weight: bold; margin-top: 10px;">
+                <p th:text="${error}"></p>
+            </div>
+
+            <div th:if="${logout}" style="color: green; font-weight: bold; margin-top: 10px;">
+                <p th:text="${logout}"></p>
+            </div>
+
+            <form th:action="@{/login}" method="post">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Escriu..." required>
+
+                <label for="password">Contrasenya:</label>
+                <input type="password" id="password" name="password" placeholder="Escriu..." required>
+
+                <button type="submit" class="btn-confirmar">Confirmar</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
